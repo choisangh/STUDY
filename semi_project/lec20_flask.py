@@ -70,8 +70,13 @@ def form_submit_get():
 
 
     # ----------------재무 정보 시각화 관련 함수------------------ by 이혜린
-    radar_label, radar_dict = relate_radar_data(stock_code=origin_code)
-    bar_label, bar_mch_list, bar_dg_list = mch_dg(stock_code=origin_code)
+    radar_label, radar_dict, weather_list, foreign, giguan = relate_radar_weather_data(stock_code=stock_code)
+    bar_label, bar_mch_list, bar_dg_list = mch_dg(stock_code=stock_code)
+    icons = icon_selection(weather_list)
+    icons2 = foreign_giguan([foreign, giguan])
+
+    giguan =format(int(giguan), ',')
+    foreign =format(int(foreign), ',')
 
 
 
@@ -83,8 +88,8 @@ def form_submit_get():
 
 
     #-------------------ARIMA 관련 함수------------------------ by 황지현
-    low_stock, low_mae = stock_predict(stock_code, '고가')
-    high_stock, high_mae = stock_predict(stock_code, '저가')
+    low_stock, low_mae = stock_predict(stock_code, '저가')
+    high_stock, high_mae = stock_predict(stock_code, '고가')
     close_stock, close_mae = stock_predict(stock_code, '종가')
     mae_mean = ((high_mae + low_mae + close_mae) / 3)
     mae_mean = round(mae_mean, 4)
@@ -110,7 +115,13 @@ def form_submit_get():
                            BAR_DATA_LIST_MCH=bar_mch_list,
                            BAR_DATA_LIST_DG=bar_dg_list,MY_NEWS=json_obj, MY_CODE=code,
                            MY_HIGH=high_stock, MY_LOW=low_stock, MY_CLOSE=close_stock,
-                           MY_MAE=mae_mean
+                           MY_MAE=mae_mean,
+                           # -------220222(날씨!!!!!!!!!!)
+                           WEATHER_DATA_LIST=weather_list,  # PER PBR ROE EPS BPS
+                           ICONS=icons,
+                           FOREIGN=foreign,  # 외인 매수
+                           GIGUAN=giguan,  # 기관 매수
+                           ICONS2=icons2  # 외인, 기관 매수
                            )
 
 
@@ -130,7 +141,7 @@ def chart_data(ent, select_date = None):
 
     else:
         e_date = datetime.now()
-        s_date = e_date - timedelta(days=365)
+        s_date = e_date - timedelta(days=30)
         print(f"s_date .................: {s_date}")
         ent_df = stock.get_market_ohlcv_by_date(fromdate=s_date, todate=e_date, ticker=ent)
     ent_df = ent_df.reset_index()

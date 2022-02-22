@@ -173,6 +173,176 @@ def fn_craw(stock_code):
 
     return table_list
 
+#                   ==============
+#                      지표 선정
+#                   ==============
+
+# 220222 날씨 수정 시작 ---------------------------------------------
+
+# -------- 지표 선정
+# 220220 수정
+# 1) 매개변수 stock_code로 축약
+# 2) 데이터프레임 하나가 아닌 리스트로 받아오기때문에 kind 제거하고 직접 선택해줌
+# 3) sli_df_y, sil_df_q 에서 '-' 가공 시 if 조건에 따라 처리하는 대신 lambda와 re.sub 이용
+# 4) dict 대신 array로 반환, 기업 이름(nm도 반환)
+def idv_radar_weather_data(stock_code):
+    """
+    # <지표 설명>
+    # 1. 배당 분석                      -> 배당성향(배당 커버리지의 역수.)
+    # 2. 유동성 분석(단기채무지급능력)    -> 당좌비율(당좌자산 / 유동부채)
+    # 3. 재무건전성 분석(레버리지 비율)   -> 부채비율(총부채 / 자기자본)의 역수
+    # 4. 수익성분석                      -> 매출수익성(당기순이익/매출액))
+    # 5. 성장성분석                      -> 순이익성장률
+    """
+
+    gcode = stock_code
+    nm = stc_code_to_nm(stock_code)
+
+    sil_df = fn_craw(gcode)[3]  # 3: 기업실적정보 재무제표 (220220 수정)
+    foreign_ms = fn_craw(gcode)[2].loc[1, '외국인']  # 2 : 외국인, 기관 거래 정보
+    giguan_ms = fn_craw(gcode)[2].loc[1, '기관']  # 2 : 외국인, 기관 거래 정보
+
+    if (sil_df.iloc[0:8, 3].isna().sum()) > 0:  # 표 안 가르고 계산하는 건 신규 상장 기업은 정보가 아예 없기 때문
+        pass
+    elif (sil_df.iloc[0:8, 9].isna().sum()) > 0:  # 표 안 가르고 계산하는 건 신규 상장 기업은 정보가 아예 없기 때문
+        pass
+
+
+    else:
+        # 0. 재무정보는 최신 분기 실공시 기준
+        # 0. 단, 배당은 1년에 한 번 이루어지기 때문에 최신 년도 공시 기준임
+        sil_df_y = sil_df['최근 연간 실적'].iloc[:, 2]  # 느리지만 .iloc으로 하는 이유는 공시 날짜가 다른 기업이 있기 때문
+        sil_df_q = sil_df['최근 분기 실적'].iloc[:, 4]
+
+        sil_df_y = sil_df_y.fillna(0)
+        sil_df_q = sil_df_q.fillna(0)
+
+        if sil_df_y.dtype == 'O':
+            sil_df_y = sil_df_y.apply(lambda x: re.sub('^-$', '0', '{}'.format(x)))
+            sil_df_y = sil_df_y.astype('float')
+
+        if sil_df_q.dtype == 'O':
+            sil_df_q = sil_df_q.apply(lambda x: re.sub('^-$', '0', '{}'.format(x)))
+            sil_df_q = sil_df_q.astype('float')
+
+        # 1. 배당성향(bd_tend)
+        bd_tend = sil_df_y[15]  # 실제 배당 성향
+
+        # 2. 유동성 분석 - 당좌비율(당좌자산/유동부채)
+        #                       당좌자산 = (유동자산 - 재고자산)
+        dj_rate = sil_df_q[7]  # 당좌비율
+
+        # 3. 재무건전성 분석 - 부채비율(총부채/자기자본)의 역수
+        bch_rate = sil_df_q[6] / 100  # 부채비율
+        bch_rate = round((1 / bch_rate) * 100, 2)
+
+        # 4. 수익성 분석 - 매출수익성(당기순이익/매출액) # TODO 매출액 0인 애들은?
+
+        dg_bene = sil_df_q[2]
+        mch = sil_df_q[0]
+
+        suyk = round((dg_bene / mch) * 100, 2)
+
+        # 5. 성장성 분석 - 순이익성장률(지속성장 가능률)
+        # (1-배당성향)*자기자본순이익률(ROE)
+        #    유보율
+
+        roe = sil_df_y[5] / 100
+        ubo = (100 - bd_tend) / 100
+        grth = round(roe * ubo * 100, 2)
+
+        data_arr = np.array([bd_tend, dj_rate, bch_rate, suyk, grth])
+
+        # weather part----------------
+        # PER?
+        weather_per = sil_df_y[10]
+
+        # PBR
+        weather_pbr = sil_df_y[12]
+
+        # ROE
+        weather_roe = sil_df_y[5]
+
+        # EPS
+        weather_eps = sil_df_y[9]
+
+        # BPS
+        weather_bps = sil_df_y[11]
+
+        # array
+        weather_arr = np.array([weather_per, weather_pbr, weather_roe, weather_eps, weather_bps])
+
+        return data_arr, weather_arr, nm, foreign_ms, giguan_ms
+
+# 수정수정수정
+
+# -------- 관련 기업 지표 선정(상대적 비율 기준)
+# 220220 수정
+# 1) 매개변수 stock_code로 축약
+# 2) dict 대신 array로 반환, 기업 이름(nm도 반환)
+
+# 220222 날씨
+
+def relate_radar_weather_data(stock_code):
+    label_list = ['배당성향', '유동성', '건전성', '수익성', '성장성']
+    arr_list = []
+
+    # 주식 코드,이름으로 변환
+
+    gcode = stock_code
+
+    relate_corp = relate_code_crawl(co=gcode)
+
+    # 다섯 개 회사가 안에 있다
+    arr_list = [idv_radar_weather_data(stock_code=stcd) for stcd in relate_corp]
+
+    # arr_list에서 데이터 분리
+    radar_list = [x[0] for x in arr_list if x is not None]
+    weather_list = [x[1] for x in arr_list if x is not None]
+    nm_list = [x[2] for x in arr_list if x is not None]
+
+    # 외인 매수, 기관 매수
+    try:
+        foreign_ms = arr_list[0][3]
+    except TypeError:
+        foreign_ms=0.01
+
+    try:
+        giguan_ms = arr_list[0][4]
+    except TypeError:
+        giguan_ms=0.01
+
+    # radar_chart_data
+    radar_list = np.array(radar_list)
+
+    radar_list[:, 0] = (radar_list[:, 0] / radar_list[:, 0].mean()) * 100
+    radar_list[:, 1] = (radar_list[:, 1] / radar_list[:, 1].mean()) * 100
+    radar_list[:, 2] = (radar_list[:, 2] / radar_list[:, 2].mean()) * 100
+    radar_list[:, 3] = (radar_list[:, 3] / radar_list[:, 3].mean()) * 100
+    radar_list[:, 4] = (radar_list[:, 4] / radar_list[:, 4].mean()) * 100
+
+    # radar_chart_dict
+    radar_dict_list = []
+
+    for i, nm in enumerate(nm_list):
+        dic = {}
+        dic[nm] = radar_list[i, :].tolist()
+        radar_dict_list.append(dic)
+
+    # weather_chart_data
+    weather_list = np.array(weather_list)
+
+    weather_list[:, 0] = (weather_list[:, 0] / weather_list[:, 0].mean())  # 각 기업의 평균 대비 PER
+    weather_list[:, 1] = (weather_list[:, 1] / weather_list[:, 1].mean())  # 각 기업의 평균 대비 PBR
+    weather_list[:, 2] = (weather_list[:, 2] / weather_list[:, 2].mean())  # 각 기업의 평균 대비 ROE
+    weather_list[:, 3] = (weather_list[:, 3] / weather_list[:, 3].mean())  # 각 기업의 평균 대비 EPS
+    weather_list[:, 4] = (weather_list[:, 4] / weather_list[:, 4].mean())  # 각 기업의 평균 대비 BPS
+    weather_list=np.round(weather_list, 2)
+
+    return label_list, radar_dict_list, weather_list[0], foreign_ms, giguan_ms
+
+
+# 220222 날씨 수정 끝 ---------------------------------------------
 
 #                   ==============
 #                      지표 선정
@@ -335,6 +505,35 @@ def mch_dg(stock_code):
     return label_list, mch_list, dg_list
 
 
+def icon_selection(index_array):
+    res=[]
+    for idx in index_array:
+        if 3<idx :
+            res.append("CLEAR_DAY")
+        elif ( 1.2<idx and idx<=3 ):
+            res.append("PARTLY_CLOUDY_DAY")
+        elif ( 0.8<idx and idx<=1.2 ):
+            res.append("CLOUDY")
+        elif ( 0<idx and idx<=0.8 ):
+            res.append("RAIN")
+        else:
+            res.append("SNOW")
+
+    return res
+
+def foreign_giguan(index_array):
+    res = []
+    for idx in index_array:
+        if idx >=0:
+            res.append("CLEAR_DAY")
+        else:
+            res.append("RAIN")
+
+    return res
+
+
+
+
 # -------- BS TABLE (재무상태표 필요 없다 ^^)
 # def bs_table(corp_name=None, yh_code=None, stock_code=None):
 #     df=bs_craw(corp_name=cor_name, yh_code=yh_code, stock_code=stock_code, kind=1)
@@ -459,14 +658,17 @@ def crawl_ifrs(gcode):
     ifrs = table_list[10]
 
     ifrs = ifrs.fillna('9999999999')
-    for i in range(1, 9):
+    for i in range(1, 5):
         ifrs.iloc[:, i] = ifrs.iloc[:, i].apply(lambda x: format(float(x), ','))
+
+    ifrs = pd.concat([ifrs['IFRS(연결)'], ifrs['Annual']], axis=1)
     ifrs = ifrs.astype(str)
-    for i in range(1, 9):
+    for i in range(1, 5):
         ifrs.iloc[:12, i] = ifrs.iloc[:12, i].apply(lambda x: x[:-2])
         ifrs.iloc[18:21, i] = ifrs.iloc[18:21, i].apply(lambda x: x[:-2])
         ifrs.iloc[23:24, i] = ifrs.iloc[23:24, i].apply(lambda x: x[:-2])
-    ifrs = ifrs.replace(['9,999,999,999', '9,999,999,999.0', '99999999', '9999999999'], ['-', '-', '-', '-'])
+    ifrs = ifrs.replace(['9,999,999,999', '9,999,999,999.0'], ['-', '-'])
+    ifrs.rename(columns={'IFRS(연결)': ''}, inplace=True)
     ifrs = ifrs.to_html(justify="right", index=False, classes="table")
     ifrs = ifrs.replace('border="1"', 'border="0"')
     pd.options.display.float_format = '{:,.0f}'.format

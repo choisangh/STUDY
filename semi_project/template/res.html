@@ -126,7 +126,7 @@
 <!--            kms re 아이콘 변경 start-->
           <div class="row tile_count" style="z-index:1;margin-top:60px;">
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-thumbs-o-up"></i> {{hidden_corp_name|safe}}</span>
+              <span class="count_top"><i class="fa fa-thumbs-o-up"></i><font size="3"> {{hidden_corp_name|safe}}</font></span>
               <div class="count"><span style="font-size: 30px;">&#8361;&nbsp;</span>{{res_obj['ent_dict']['today']}}</div>
 
               <span class="count_bottom"><i class="{{res_obj['ent_dict']['color']}}"><i class="{{res_obj['ent_dict']['rate']}}"></i>{{ "%.2f"|format((res_obj['ent_dict']['today'] - res_obj['ent_dict']['eve'])/res_obj['ent_dict']['eve']*100)}}&#37;
@@ -134,31 +134,31 @@
             </div>
 <!--              kms re end-->
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-line-chart"></i> KOSPI</span>
+              <span class="count_top"><i class="fa fa-line-chart"></i><font size="3"> KOSPI</font></span>
               <div class="count">{{f_info['^KS11'][1]}}</div>
               <span class="count_bottom"><i class="{{f_info['^KS11']['color']}}"><i class="{{f_info['^KS11']['rate']}}"></i>{{ "%.2f"|format((f_info['^KS11'][1] - f_info['^KS11'][0])/f_info['^KS11'][0]*100)}}&#37;
               </i> &nbsp;{{f_info['^KS11'][0]}}</span>
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-line-chart"></i> KOSDAQ</span>
+              <span class="count_top"><i class="fa fa-line-chart"></i><font size="3"> KOSDAQ</font></span>
               <div class="count">{{f_info['^KQ11'][1]}}</div>
               <span class="count_bottom"><i class="{{f_info['^KQ11']['color']}}"><i class="{{f_info['^KQ11']['rate']}}"></i>{{ "%.2f"|format((f_info['^KQ11'][1] - f_info['^KQ11'][0])/f_info['^KQ11'][0]*100)}}&#37;
               </i> &nbsp;{{f_info['^KQ11'][0]}}</span>
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-line-chart"></i> NASDAQ</span>
+              <span class="count_top"><i class="fa fa-line-chart"></i><font size="3"> NASDAQ</font></span>
               <div class="count">{{f_info['^IXIC'][1]}}</div>
               <span class="count_bottom"><i class="{{f_info['^IXIC']['color']}}"><i class="{{f_info['^IXIC']['rate']}}"></i>{{ "%.2f"|format((f_info['^IXIC'][1] - f_info['^IXIC'][0])/f_info['^IXIC'][0]*100)}}&#37;
               </i> &nbsp;{{f_info['^IXIC'][0]}}</span>
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-line-chart"></i> S&P500</span>
+              <span class="count_top"><i class="fa fa-line-chart"></i><font size="3"> S&P500</font></span>
               <div class="count">{{f_info['^GSPC'][1]}}</div>
               <span class="count_bottom"><i class="{{f_info['^GSPC']['color']}}"><i class="{{f_info['^GSPC']['rate']}}"></i>{{ "%.2f"|format((f_info['^GSPC'][1] - f_info['^GSPC'][0])/f_info['^GSPC'][0]*100)}}&#37;
               </i> &nbsp;{{f_info['^GSPC'][0]}}</span>
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-              <span class="count_top"><i class="fa fa-line-chart"></i> Dows Jones</span>
+              <span class="count_top"><i class="fa fa-line-chart"></i><font size="3"> Dows Jones</font></span>
               <div class="count">{{f_info['^DJI'][1]}}</div>
               <span class="count_bottom"><i class="{{f_info['^DJI']['color']}}"><i class="{{f_info['^DJI']['rate']}}"></i>{{ "%.2f"|format((f_info['^DJI'][1] - f_info['^DJI'][0])/f_info['^DJI'][0]*100)}}&#37;
               </i> &nbsp;{{f_info['^DJI'][0]}}</span>
@@ -173,7 +173,7 @@
 
                 <div class="row x_title">
                   <div id = 'ent_code' name = 'ent_code' class="col-md-6">
-                    <h2>{{hidden_corp_name | safe}}</h2>
+                      <b><font size="5">{{hidden_corp_name | safe}} 주가 차트</font></b>
                   </div>
                   <div class="col-md-6">
                     <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
@@ -202,12 +202,12 @@
                               <tr>
                                   <td align="left"><font size="4">{{hidden_corp_name|safe}}</font></td>
                                 <td align="left" class="fs15 fw700 text-right"><font size="3">고가</font></td>
-                                  <td align="left" class="fs15 fw700 text-right"><i class="fa fa-won"></i><font size="3">{{MY_LOW|safe}}</font></td>
+                                  <td align="left" class="fs15 fw700 text-right"><i class="fa fa-won"></i><font size="3">{{MY_HIGH|safe}}</font></td>
                               </tr>
                               <tr>
                                   <td align="left"><font size="4">{{hidden_corp_name|safe}}</font></td>
                                   <td align="left" class="fs15 fw700 text-right"></i><font size="3">저가</font></td>
-                                  <td align="left" class="fs15 fw700 text-right"><i class="fa fa-won"><font size="3">{{MY_HIGH|safe}}</font></td>
+                                  <td align="left" class="fs15 fw700 text-right"><i class="fa fa-won"><font size="3">{{MY_LOW|safe}}</font></td>
                               </tr>
                               <tr>
                                 <td align="left"><font size="4">{{hidden_corp_name|safe}}</font></td>
@@ -216,7 +216,7 @@
                               </tr>
                             </tbody>
                           </table>
-                            <h2 class="line_30"> <p style="text-align:right;margin-top:70px;" ><font size="5"><b>평균오차(mae):{{MY_MAE|safe}}</b></font></p></h2>
+                            <h2 class="line_30"> <p style="text-align:right;margin-top:30%;" ><font size="5"><b>평균오차(mae):{{MY_MAE|safe}}</b></font></p></h2>
 
 
                   </div>
@@ -451,7 +451,6 @@
                     </ul>
 
                     <div class="sidebar-widget" style="width:70%;">
-                        <h1 style="margin-bottom:0px;margin-top:0px;"><b>권유 비율</b></h1>
                         <canvas id="chart_gauge_01" class="" style="width: 100%; height: 100%;"></canvas>
                         <div class="goal-wrapper">
                           <span id="gauge-text" class="gauge-value pull-left">79</span>
@@ -468,7 +467,108 @@
 
 <!--//뉴스-->
           <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
+                  <div class="x_panel">
+                    <div class="x_title">
+                        <h2><b>기업 투자 예보 -{{hidden_corp_name | safe}}-</b></h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Settings 1</a>
+                            </li>
+                            <li><a href="#">Settings 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" style="margin-left:7%;margin-bottom:30px;margin-top:3%;">
+
+                      <div class="row">
+
+
+                            <div class="col-sm-5">
+                          <div class="daily-weather">
+                            <h2 class="day">외국인 매매 주식</h2>
+                            <h5 align="center">{{FOREIGN | safe}}주</h5>  <!--외인 해 뜨면 샀다 비오면 팔았다 폰트 줄이기 TODO-->
+                            <center><canvas height="84" width="50" id="icon5"></canvas></center>
+
+                          </div>
+                        </div>
+                        <div class="col-sm-5">
+                          <div class="daily-weather">
+                            <h2 class="day">기관 매매 주식</h2>
+                            <h5 align="center">{{GIGUAN | safe}}주</h5> <!--기관 해 뜨면 샀다 비오면 팔았다 폰트 줄이기 TODO-->
+                            <center><canvas height="84" width="50" id="icon6"></canvas></center>
+
+                          </div>
+                        </div>
+
+                      </div>
+                        <div class="row weather-days">
+                          <div class="col-sm-2">
+
+                           <div class="daily-weather">
+                              <h2 class="day">PER</h2>
+                             <h4 align="center"><b>{{WEATHER_DATA_LIST[0] | safe}}</b></h4>
+                              <center><canvas height="84" width="50" id="icon0"></canvas></center>
+                           </div>
+
+                         </div>
+                        <div class="col-sm-2">
+                          <div class="daily-weather">
+                            <h2 class="day">PBR</h2>
+                            <h4 align="center">{{WEATHER_DATA_LIST[1] | safe}}</h4>
+
+                            <center><canvas height="84" width="50" id="icon1"></canvas></center>
+
+
+
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="daily-weather">
+                            <h2 class="day">ROE</h2>
+
+                            <h4 align="center">{{WEATHER_DATA_LIST[2] | safe}}</h4>
+                             <center><canvas height="84" width="50" id="icon2"></canvas></center>
+
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="daily-weather">
+                            <h2 class="day">EPS</h2>
+                            <h4 align="center">{{WEATHER_DATA_LIST[3] | safe}}</h4>
+                              <center><canvas height="84" width="50" id="icon3"></canvas></center>
+
+
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="daily-weather">
+                            <h2 class="day">BPS</h2>
+                            <h4 align="center">{{WEATHER_DATA_LIST[4] | safe}}</h4>
+                              <center><canvas height="84" width="50" id="icon4"></canvas></center>
+
+                          </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                      </div>
+                      </div>
+
+
+
+                    </div>
+                  </div>
+
+            <div class="col-md-4 col-sm-4 col-xs-12">
               <div class="x_panel">
                 <div class="x_title">
                   <h2><b>관련기사</b> </h2>
@@ -516,7 +616,7 @@
             </div>
 
 <!--            재무제표-->
-            <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-4 col-sm-4 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2><b>재무제표</b> <small>Net Quarter  (단위: 억원)</small></h2>
@@ -925,6 +1025,21 @@
 
 
 </script>
+          <script src="skycons.js"></script>
+    <script>
+    var skycons = new Skycons({"color": "#42C1A7"});
+
+    skycons.add("icon0", Skycons.{{ICONS[0] | safe}});
+    skycons.add("icon1", Skycons.{{ICONS[1] | safe}});
+    skycons.add("icon2", Skycons.{{ICONS[2] | safe}});
+    skycons.add("icon3", Skycons.{{ICONS[3] | safe}});
+    skycons.add("icon4", Skycons.{{ICONS[4] | safe}});
+
+    skycons.add("icon5", Skycons.{{ICONS2[0] | safe}});
+    skycons.add("icon6", Skycons.{{ICONS2[1] | safe}});
+
+    skycons.play();
+    </script>
 
 
   </body>
