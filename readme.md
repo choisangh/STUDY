@@ -1,3 +1,19 @@
+수리통계학 공부 통계학 개념정리 및 구현
+
+강의자료 https://crkim.pusan.ac.kr/
+
+수리통계학1 www.kocw.net/home/search/kemView.do?kemId=1363783
+
+수리통계학2 www.kocw.net/home/search/kemView.do?kemId=1390551
+
+고급통계학1 www.kocw.net/home/search/kemView.do?kemId=1355794
+
+고급통계학2 www.kocw.net/home/search/kemView.do?kemId=1355820
+
+
+
+AL/ML
+
 
 <a href="https://kooc.kaist.ac.kr/mathforai/joinLectures/74606">[선형대수] KOOC : AI 비전공자를 위한 기초 수학 1: 선형대수학</a>
 
