@@ -1,4 +1,8 @@
-수리통계학 공부 통계학 개념정리 및 구현
+# Algorithm & Data Structure
+* 알고리즘 & 데이터 구조 개념정리 및 백준 문제풀이 
+
+# 수리통계학 
+* 통계학 개념정리 및 구현
 
 강의자료 https://crkim.pusan.ac.kr/
 
@@ -11,10 +15,13 @@
 고급통계학2 www.kocw.net/home/search/kemView.do?kemId=1355820
 
 
+# Financial Quant
+* 금융공학 & 퀀트 트레이딩
 
-AL/ML
 
 
+# DL/ML
+* DL 수학 및 DL/ML 모델링
 <a href="https://kooc.kaist.ac.kr/mathforai/joinLectures/74606">[선형대수] KOOC : AI 비전공자를 위한 기초 수학 1: 선형대수학</a>
 
 <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">[선형대수] 3Blue1Brown : Essence of linear algebra</a>
