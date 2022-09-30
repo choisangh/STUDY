@@ -22,9 +22,11 @@
 
 # DL/ML
 * DL 수학 및 DL/ML 모델링
+
+
 <a href="https://kooc.kaist.ac.kr/mathforai/joinLectures/74606">[선형대수] KOOC : AI 비전공자를 위한 기초 수학 1: 선형대수학</a>
 
-<a href="https://tutorials.pytorch.kr/recipes/recipes_index.html">파이토치 튜토리얼</
+<a href="https://tutorials.pytorch.kr/recipes/recipes_index.html">파이토치 튜토리얼</a>
 
 <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">[선형대수] 3Blue1Brown : Essence of linear algebra</a>
 
